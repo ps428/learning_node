@@ -1,0 +1,6 @@
+create table users (name varchar(255), password varchar(255), userid varchar(255), email varchar(255), image_link varchar(255), PRIMARY KEY(userid));
+
+insert into users (name, password, userid, email, image_link) values ('Pranav Soni', '123456', 'pranavs', 'pranavs@nodejs.com','https://en.wikipedia.org/wiki/Stewie_Griffin#/media/File:Stewie_Griffin.png');
+insert into users (name, password, userid, email, image_link) values ('Brian', '123456', 'briandog', 'bd@nodejs.com','https://en.wikipedia.org/wiki/Brian_Griffin#/media/File:Brian_Griffin.png');
+insert into users (name, password, userid, email, image_link) values ('Quagmire', '123456', 'quagmire', '69@nodejs.com','https://en.wikipedia.org/wiki/Glenn_Quagmire#/media/File:Glenn_Quagmire.png');
+insert into users (name, password, userid, email, image_link) values ('Stewie Griffin', '123456', 'stewiekills', 'killer@nodejs.com','https://en.wikipedia.org/wiki/Stewie_Griffin#/media/File:Stewie_Griffin.png');
