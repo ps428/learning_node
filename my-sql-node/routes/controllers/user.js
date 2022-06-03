@@ -1,8 +1,8 @@
-const {getUsers} = require('../../db_functions/userMySQL')
+const userMySQL = require('../../db_functions/userMySQL')
 
 const getUser = async (req,res)=>{
     const userid = req.params.userid
-    const users = await getUsers();
+    const users = await userMySQL.getUsersMySQL();
     const user = users.find((currentUser)=>currentUser.userid== userid)
     console.log(user)
     if(user){
@@ -14,7 +14,7 @@ const getUser = async (req,res)=>{
 }
 
 const getAllUsers = async (req,res)=>{
-    const users = await getUsers();
+    const users = await userMySQL.getUsersMySQL();
     console.log(users)
     if(users){
         return res.json({success:true,"data":users,"test":"yay"})
@@ -26,4 +26,14 @@ const getAllUsers = async (req,res)=>{
 
 }
 
-module.exports = {getUser, getAllUsers}
+const addUser = async (req,res)=>{
+    const userData = req.body   
+    // console.log(userData)
+    res.send("Adding")
+    const result = await userMySQL.addUserMySQL(userData)
+
+    console.log(`result was:${result}`)
+    
+}
+
+module.exports = {getUser, getAllUsers, addUser}
