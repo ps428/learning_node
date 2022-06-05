@@ -29,11 +29,20 @@ const getAllUsers = async (req,res)=>{
 const addUser = async (req,res)=>{
     const userData = req.body   
     // console.log(userData)
-    res.send("Adding")
-    const result = await userMySQL.addUserMySQL(userData)
+    try{
+        res.send(`Adding in progress`)
+        console.log(`Running`)
+        const result = await userMySQL.addUserMySQL(userData)
+        console.log(`result was: ${result}`)
 
-    console.log(`result was:${result}`)
+    }
+    catch(err){
+        console.log(`Error`)
+        console.log(err)
+
+    }
     
+
 }
 
 module.exports = {getUser, getAllUsers, addUser}

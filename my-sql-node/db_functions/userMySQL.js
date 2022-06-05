@@ -32,14 +32,16 @@ async function addUserMySQL(userData) {
         var response = new Promise((resolve, reject) => {
 
             connection.query(query, [name, password, userid, email, image_link], (err, results) => {
-                if (err) reject(new Error(err.message));
+                if (err){
+                    returnValue=false
+                }
                 else {
                     resolve(results);
                     returnValue = true;
                 }
             })
         });
-        return response
+        return returnValue
 
     } catch (error) {
         console.log(error);
