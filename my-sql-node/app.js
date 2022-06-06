@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/user')
+const authRoutes = require('./routes/auth')
 
 //to config env file
 dotenv.config()
@@ -13,7 +14,8 @@ app.get('/',(req,res)=>{
     res.send("Welcome")
 })
 
-app.use('/users',userRoutes)
+app.use('/api/users',userRoutes)
+app.use('/api/auth',authRoutes)
 
 const {connection} = require('./dbConfigMysql')
 

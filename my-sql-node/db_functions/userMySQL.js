@@ -22,30 +22,34 @@ async function addUserMySQL(userData) {
     const email = userData['email']
     const image_link = userData['image_link']
 
-    var returnValue = false;
-
+    var returnValue = 'failure';
 
     const query = "INSERT INTO users VALUES (?,?,?,?,?);"
 
     try {
-
-        var response = new Promise((resolve, reject) => {
-
+        var response = await new Promise((resolve, reject) => {
             connection.query(query, [name, password, userid, email, image_link], (err, results) => {
                 if (err){
-                    returnValue=false
+                    returnValue={success:false,data: err.message}
+                    // console.log(err.message)
+                    reject(err.message)
                 }
                 else {
                     resolve(results);
-                    returnValue = true;
+                    returnValue = {success:true};
                 }
             })
         });
+        // console.log(response)
         return returnValue
-
+        
     } catch (error) {
         console.log(error);
+        returnValue = {success:false, data:error.message}
     }
     return returnValue
 }
+
+
+
 module.exports = { getUsersMySQL, addUserMySQL }

@@ -4,3 +4,37 @@ insert into users (name, password, userid, email, image_link) values ('Pranav So
 insert into users (name, password, userid, email, image_link) values ('Brian', '123456', 'briandog', 'bd@nodejs.com','https://en.wikipedia.org/wiki/Brian_Griffin#/media/File:Brian_Griffin.png');
 insert into users (name, password, userid, email, image_link) values ('Quagmire', '123456', 'quagmire', '69@nodejs.com','https://en.wikipedia.org/wiki/Glenn_Quagmire#/media/File:Glenn_Quagmire.png');
 insert into users (name, password, userid, email, image_link) values ('Stewie Griffin', '123456', 'stewiekills', 'killer@nodejs.com','https://en.wikipedia.org/wiki/Stewie_Griffin#/media/File:Stewie_Griffin.png');
+
+
+
+{
+    "name":"Stewie Griffin",
+    "password":"123456",
+    "userid":"stew_world",
+    "email":"englishmen@node.com",
+    "image_link":"https://en.wikipedia.org/wiki/Stewie_Griffin#/media/File:Stewie_Griffin.png"
+}
+
+{
+    "name":"Peter Griffin",
+    "password":"123456",
+    "userid":"peter",
+    "email":"beer@node.com",
+    "image_link":"https://en.wikipedia.org/wiki/Peter_Griffin#/media/File:Peter_Griffin.png"
+}
+
+{
+    "name":"Lois Griffin",
+    "password":"123456",
+    "userid":"hmm",
+    "email":"hmmmm@node.com",
+    "image_link":"https://en.wikipedia.org/wiki/Lois_Griffin#/media/File:Lois_Griffin.png"
+}
+
+{
+    "name":"Chris Griffin",
+    "password":"123456",
+    "userid":"chris_rules",
+    "email":"chriss@node.com",
+    "image_link":"https://en.wikipedia.org/wiki/Chris_Griffin#/media/File:Chris_Griffin.png"
+}
