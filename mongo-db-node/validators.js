@@ -19,7 +19,6 @@ createUserValidation = [
     check('Password','Enter password of atleast 6 characters').isLength({min:6}),
 ]
 
-
 updateUserValidation = [
     check('Name','Name is required').not().isEmpty(),
     check('Address','Address is required').not().isEmpty(),
@@ -39,8 +38,19 @@ updateUserValidation = [
 
 
 logInValidation = [
-    check('userid','Please enter a unique user id').not().isEmpty(),
-    check('password','Enter password of atleast 6 characters').isLength({min:6})    
+    check('Username','Please enter a unique user id').not().isEmpty(),
+    check('Password','Enter password of atleast 6 characters').isLength({min:6})    
 ]
 
-module.exports = {registerValidation, logInValidation}
+
+changePasswordValidation = [
+    check('Username','Please enter a unique user id').not().isEmpty(),
+    check('OldPassword','Enter password of atleast 6 characters').isLength({min:6}),
+    check('NewPassword','Enter password of atleast 6 characters').isLength({min:6})    
+]
+
+deleteValidation = [
+    check('Username','Please enter a unique user id').not().isEmpty(),
+]
+
+module.exports = {createUserValidation, updateUserValidation, logInValidation, deleteValidation, changePasswordValidation}
