@@ -14,7 +14,8 @@ const dbName = process.env.dbName
 const collectionName = process.env.collectionName
 const saltValue = process.env.saltValue;
 
-const { MongoClient } = require('mongodb')
+const { MongoClient } = require('mongodb');
+const { validateRequestAction } = require('../../validators/validation_action');
 const url = process.env.dbURL
 
 //---------CREATE USER: DONE
@@ -45,6 +46,7 @@ const checkDuplicateUsername = async (Username) => {
 }
 
 const createUser = async (req, res) => {
+
     const client = new MongoClient(url)
 
     //can use schema here but then unhashed password would be sent, so doing it here like this
@@ -264,7 +266,6 @@ const changePassword = async (req, res) => {
         return res.status(404).send(`Error! Wrong credentials`)
     }
 
-    
         try {
             await client.connect()
             const database = client.db(dbName)

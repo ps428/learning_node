@@ -5,15 +5,16 @@ const router = express.Router()
 const user = require('./controllers/userController')
 
 //Importing validators
-const {createUserValidation, updateUserValidation, logInValidation, deleteValidation, changePasswordValidation} = require('../validators')
+const validator = require('../validators/validation_schema')
+const validatorAction = require('../validators/validation_action')
 
 //Setting the requests 
-router.post('/createuser',createUserValidation, user.createUser)
-router.put('/updateuser',updateUserValidation, user.updateUser)
-router.delete('/deleteuser',deleteValidation, user.deleteUser)
-router.put('/changepassword',changePasswordValidation, user.changePassword)
+router.post('/createuser', validator.createUserValidation, validatorAction, user.createUser)
+router.put('/updateuser', validator.updateUserValidation, validatorAction, user.updateUser)
+router.delete('/deleteuser', validator.deleteValidation, validatorAction, user.deleteUser)
+router.put('/changepassword', validator.changePasswordValidation, validatorAction, user.changePassword)
 
 //for testing
-router.post('/login',user.logIn)
+router.post('/login', validator.logInValidation, validatorAction, user.logIn)
 
 module.exports = router;
