@@ -105,7 +105,8 @@ const createUser = async (req, res) => {
 }
 
 
-//---------GET PROFILE: DONE: Basic Login work
+//---------GET PROFILE: DONE: Basic Login work ///THIS IS ALSO USED FOR CHANGE PASSWORD FUNCTIONALITY 
+//DON'T REMOVE FETCH PROFILES FUNCTION
 const fetchProfileData = async (Username, Password) => {
     try {
         const client = new MongoClient(url)
@@ -257,31 +258,42 @@ const changePassword = async (req, res) => {
     if (! await checkDuplicateUsername(Username)) {
         return res.status(409).send(`Error! Username: ${Username} not found`)
     }
+    
+    const results = await fetchProfileData(Username, OldPassword)
+    if(!results['success']){
+        return res.status(404).send(`Error! Wrong credentials`)
+    }
 
-    async function run() {
+    
         try {
             await client.connect()
             const database = client.db(dbName)
             const collection = database.collection(collectionName)
 
+            const salt = await bcrypt.genSalt(Number(saltValue));
+
+            TokenizedPasswrod = await bcrypt.hash(NewPassword, salt);
+        
+
+            const query = {Username:Username}
+            
             const updateDoc = {
                 $set: {
-                    writer: writer,
+                    Password: TokenizedPasswrod,
                 },
             }
 
-            const result = await collection.updateOne({}, updateDoc, {});
+            const result = await collection.updateOne(query, updateDoc);
 
-            res.json(`Updated author name to: ${writer}`)
+            return res.json(`Changed password succesfully`)
         }
         catch (error) {
             console.warn("ERROR: " + error);
+            return res.status(400).send("ERROR!")
         }
         finally {
             await client.close()
         }
-    }
-    run().catch(console.dir)
 }
 
 

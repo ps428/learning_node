@@ -11,7 +11,7 @@ const {createUserValidation, updateUserValidation, logInValidation, deleteValida
 router.post('/createuser',createUserValidation, user.createUser)
 router.put('/updateuser',updateUserValidation, user.updateUser)
 router.delete('/deleteuser',deleteValidation, user.deleteUser)
-router.post('/changepassword',changePasswordValidation, user.changePassword)
+router.put('/changepassword',changePasswordValidation, user.changePassword)
 
 //for testing
 router.post('/login',user.logIn)
