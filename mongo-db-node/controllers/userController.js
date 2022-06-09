@@ -53,38 +53,18 @@ const checkDuplicateUsername = async (Username) => {
 const createUser = async (req, res) => {
   const client = new MongoClient(url);
 
-  // can use schema here but then unhashed password would be sent, so doing it here like this
-  const Name = req.body.Name;
-  const Add1 = req.body.Address.Add1;
-  const Add2 = req.body.Address.Add2;
-  const Add3 = req.body.Address.Add3;
-  const Area = req.body.Address.Area;
-  const City = req.body.Address.City;
-  const State = req.body.Address.State;
-  const Country = req.body.Address.Country;
-  const Pincode = req.body.Address.Pincode;
-  const Mobile = req.body.ContactDetails.Mobile;
-  const Email = req.body.ContactDetails.Email;
-  const Picture = req.body.Picture;
-  let UserType = req.body.UserType;
   const Username = req.body.Username;
-  const Password = req.body.Password;
 
 
   if (await checkDuplicateUsername(Username) == 1) {
     return res.status(409).json({success: false, error: `Error! duplicate username: ${Username}`});
   }
 
-  // set default user type as cs
-  if (UserType == '') {
-    UserType = 'CS';
-  }
-
   // tokenize the password with bcrypt or JWT something, TODO
   // now we set user password to hashed password
   const salt = await bcrypt.genSalt(Number(saltValue));
 
-  const TokenizedPasswrod = await bcrypt.hash(Password, salt);
+  req.body.Password = await bcrypt.hash(req.body.Password, salt);
 
   // how to get username?
   // eslint-disable-next-line require-jsdoc
@@ -93,8 +73,7 @@ const createUser = async (req, res) => {
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
 
-    const result = await collection.insertOne(({Name: Name, Address: {Add1: Add1, Add2: Add2, Add3: Add3, Area: Area, City: City, State: State, Country: Country, Pincode: Pincode}, ContactDetails: {Mobile: Mobile, Email: Email}, Picture: Picture, UserType: UserType, Username: Username, Password: TokenizedPasswrod}));
-
+    const result = await collection.insertOne(req.body);
     // retreving the sent data back from DB
     const user = await collection.findOne({Username: Username});
 
@@ -161,20 +140,7 @@ const logIn = async (req, res) => {
 // ---------UPDATE USER: TODO
 const updateUser = async (req, res) => {
   const client = new MongoClient(url);
-  // Model.findById(id).updateOne(req.body)
-  const Name = req.body.Name;
-  const Add1 = req.body.Address.Add1;
-  const Add2 = req.body.Address.Add2;
-  const Add3 = req.body.Address.Add3;
-  const Area = req.body.Address.Area;
-  const City = req.body.Address.City;
-  const State = req.body.Address.State;
-  const Country = req.body.Address.Country;
-  const Pincode = req.body.Address.Pincode;
-  const Mobile = req.body.ContactDetails.Mobile;
-  const Email = req.body.ContactDetails.Email;
-  const Picture = req.body.Picture;
-  const UserType = req.body.UserType;
+
   const Username = req.params.id;
 
   if (await checkDuplicateUsername(Username) == 0) {
@@ -187,8 +153,7 @@ const updateUser = async (req, res) => {
     const collection = database.collection(collectionName);
 
     const query = {Username: Username};
-    const update = {$set: {Name: Name, Address: {Add1: Add1, Add2: Add2, Add3: Add3, Area: Area, City: City, State: State, Country: Country, Pincode: Pincode}, ContactDetails: {Mobile: Mobile, Email: Email}, Picture: Picture, UserType: UserType}};
-
+    const update = {$set: req.body};
     const results = await collection.updateOne(query, update);
 
     console.log((results));
