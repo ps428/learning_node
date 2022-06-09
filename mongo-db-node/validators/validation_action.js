@@ -1,13 +1,14 @@
-const { validationResult } = require('express-validator')
+import {validationResult} from 'express-validator';
+// const { validationResult } = require('express-validator')
 
-const validateRequestAction = (req, res, next) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(409).json({ success: false, errors: errors.array() })
-    }
+const validatorAction = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(409).json({success: false, errors: errors.array()});
+  }
 
-    next();
-}
+  next();
+};
 
-module.exports = validateRequestAction 
+export {validatorAction};
 

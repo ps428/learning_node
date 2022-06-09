@@ -1,11 +1,9 @@
-- [ ] User side basic register and login
-- [ ] Password reset
+- [X] User side basic register and login
+- [X] Password reset
 - [ ] User session ?
 - [ ] User acivity ?
 
 Errors
 - [ ] Image handling
-- [ ] Access to username on update profile
 - [ ] Password JWT thing
-- [ ] Unable to log in to the timesheet portal and other link sent on mail
-- [ ] Check functionality of validators
+- [X] Check functionality of validators
