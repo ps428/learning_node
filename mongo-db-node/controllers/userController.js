@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 // bcrypt to encrypt password
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 // const bcrypt = require("bcrypt");
 
 // importing jwt
@@ -79,10 +79,11 @@ const createUser = async (req, res) => {
 
   // Auto generation of passsword
   // eslint-disable-next-line quotes
-  if (req.body.Password="") {
+  if (req.body.Password=="") {
     req.body.Password = await createPassword();
   };
-  req.body.Password = await bcrypt.hash(req.body.Password, salt);
+
+  req.body.Password = bcrypt.hashSync(req.body.Password, salt);
 
   // how to get username?
   // eslint-disable-next-line require-jsdoc
@@ -114,17 +115,19 @@ const fetchProfileData = async (Username, Password) => {
     const collection = database.collection(collectionName);
     const userData = await collection.findOne({Username: Username});
 
-    // console.log((userData['Password']))
-
+    if (!bcrypt.compareSync(Password, userData['Password'])) {
+      console.log('The Current Password is Wrong');
+    } else {
+      console.log('Correct password');
+    }
     await bcrypt.compare(Password, userData['Password']).then((result) => {
-      console.log(Password, userData['Password']);
       if (!result) {
-        profile = {success: 0, data: 'Wrong credentials entered!!'};
+        profile = {success: 0, data: 'Wrong credentials!!'};
+
         console.log('Password doesn\'t match!');
       } else {
         profile = {success: 1, data: userData};
         console.log('Password matches!');
-        success = 1;
         // console.log(profile);
         // return profile
       }
@@ -138,7 +141,6 @@ const fetchProfileData = async (Username, Password) => {
     return profile;
   }
 };
-
 const logIn = async (req, res) => {
   const Username = req.body.Username;
   const Password = req.body.Password;
@@ -229,15 +231,6 @@ const changePassword = async (req, res) => {
   };
   console.log(Username);
 
-  // --------------
-  const jwtSecretKey = process.env.JWT_SECRET_KEY;
-  const token = jwt.sign(data, jwtSecretKey);
-  res.header('auth-token', token);
-  // Recieveing token
-  //   var token = req.headers['x-access-token'];
-
-  // 1. HOW TO PASS IN THE DATABASE NAME AND COLLECTION NAME IN THE REST API FUNCTIONS ITSELF
-  // --------------
 
   // Check if user exists or not before updation
   if (! await checkDuplicateUsername(Username)) {
@@ -249,6 +242,11 @@ const changePassword = async (req, res) => {
     return res.status(404).json({success: false, error: `Error! Wrong credentials`});
   }
 
+  // Check if new password is same as old password
+  if (NewPassword==OldPassword) {
+    return res.status(400).json({success: false, error: `Old password and new password can not be same`});
+  }
+
   try {
     await client.connect();
     const database = client.db(dbName);
@@ -256,7 +254,7 @@ const changePassword = async (req, res) => {
 
     const salt = await bcrypt.genSalt(Number(saltValue));
 
-    TokenizedPasswrod = await bcrypt.hash(NewPassword, salt);
+    const TokenizedPasswrod = await bcrypt.hash(NewPassword, salt);
 
 
     const query = {Username: Username};
@@ -268,6 +266,16 @@ const changePassword = async (req, res) => {
     };
 
     const result = await collection.updateOne(query, updateDoc);
+
+    // -------------- JWT
+    const jwtSecretKey = process.env.JWT_SECRET_KEY;
+    const token = jwt.sign(data, jwtSecretKey);
+    res.header('auth-token', token);
+    // Recieveing token
+    //   var token = req.headers['x-access-token'];
+
+    // 1. HOW TO PASS IN THE DATABASE NAME AND COLLECTION NAME IN THE REST API FUNCTIONS ITSELF
+    // --------------
 
     return res.json({result: result, msg: `Changed password succesfully`});
   } catch (error) {
