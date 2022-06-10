@@ -3,5 +3,6 @@
 \
 Errors
 - [X] Image handling
-- [ ] Password JWT thing
 - [X] Check functionality of validators
+- [ ] Password JWT thing
+- [ ] On update, the nested json objects are overridden, so should I bring them out and create entirely different entities

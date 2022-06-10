@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 import express from 'express';
 // const express = require('express')
@@ -9,6 +10,9 @@ app.use(express.urlencoded({extended: false}));
 // bcrypt to encrypt password
 import bcrypt from 'bcrypt';
 // const bcrypt = require("bcrypt");
+
+// importing jwt
+import jwt from 'jsonwebtoken';
 
 // env config
 import dotenv from 'dotenv';
@@ -74,10 +78,10 @@ const createUser = async (req, res) => {
   const salt = await bcrypt.genSalt(Number(saltValue));
 
   // Auto generation of passsword
-  if (req.body.Password=null) {
+  // eslint-disable-next-line quotes
+  if (req.body.Password="") {
     req.body.Password = await createPassword();
   };
-
   req.body.Password = await bcrypt.hash(req.body.Password, salt);
 
   // how to get username?
@@ -113,10 +117,9 @@ const fetchProfileData = async (Username, Password) => {
     // console.log((userData['Password']))
 
     await bcrypt.compare(Password, userData['Password']).then((result) => {
-      // console.log(Password,userData['Password']);
+      console.log(Password, userData['Password']);
       if (!result) {
-        profile = {success: 0, data: 'Wrong credentials!!'};
-
+        profile = {success: 0, data: 'Wrong credentials entered!!'};
         console.log('Password doesn\'t match!');
       } else {
         profile = {success: 1, data: userData};
@@ -220,8 +223,21 @@ const changePassword = async (req, res) => {
   const OldPassword = req.body.OldPassword;
   const NewPassword = req.body.NewPassword;
 
-//   let jwtSecretKey = process.env.JWT_SECRET_KEY;
-//   const token = jwt.sign(req.body, jwtSecretKey);
+  const data = {
+    Username: req.body.Username,
+    Password: req.body.OldPassword,
+  };
+  console.log(Username);
+
+  // --------------
+  const jwtSecretKey = process.env.JWT_SECRET_KEY;
+  const token = jwt.sign(data, jwtSecretKey);
+  res.header('auth-token', token);
+  // Recieveing token
+  //   var token = req.headers['x-access-token'];
+
+  // 1. HOW TO PASS IN THE DATABASE NAME AND COLLECTION NAME IN THE REST API FUNCTIONS ITSELF
+  // --------------
 
   // Check if user exists or not before updation
   if (! await checkDuplicateUsername(Username)) {
