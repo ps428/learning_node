@@ -225,13 +225,6 @@ const changePassword = async (req, res) => {
   const OldPassword = req.body.OldPassword;
   const NewPassword = req.body.NewPassword;
 
-  const data = {
-    Username: req.body.Username,
-    Password: req.body.OldPassword,
-  };
-  console.log(Username);
-
-
   // Check if user exists or not before updation
   if (! await checkDuplicateUsername(Username)) {
     return res.status(409).json({successs: false, error: `Error! Username: ${Username} not found`});
@@ -267,12 +260,30 @@ const changePassword = async (req, res) => {
 
     const result = await collection.updateOne(query, updateDoc);
 
+
     // -------------- JWT
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
+    const data = {
+      userID: results.data._id,
+    }; const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
     const token = jwt.sign(data, jwtSecretKey);
     res.header('auth-token', token);
-    // Recieveing token
-    //   var token = req.headers['x-access-token'];
+
+    // Checking middleware
+    // function auth(req, res, next) {
+    //   const token = req.headers['auth-token'];
+    //   if (!token) {
+    //     return res.status(401).send('Access Denied!');
+    //   } else {
+    //     try {
+    //       const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    //       req.user = verified;
+    //        next();
+    //     } catch (err) {
+    //       res.status(400).send('Invalid token!');
+    //     }
+    //   }
+    // }
 
     // 1. HOW TO PASS IN THE DATABASE NAME AND COLLECTION NAME IN THE REST API FUNCTIONS ITSELF
     // --------------
