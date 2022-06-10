@@ -12,6 +12,7 @@ import * as user from '../controllers/userController.js';
 import * as validator from '../validators/validation_schema.js';
 // const validator = require('../validators/validation_schema')
 import {validatorAction} from '../validators/validation_action.js';
+import {auth} from '../middlewares/auth.js';
 // const validatorAction = require('../validators/validation_action')
 
 // Setting the requests
@@ -22,5 +23,6 @@ userRouter.delete('/:id', validator.deleteValidation, validatorAction, user.dele
 
 // for testing
 userRouter.post('/login', validator.logInValidation, validatorAction, user.logIn);
+userRouter.get('/userData/:id', auth, user.getUserData);
 
 export {userRouter};

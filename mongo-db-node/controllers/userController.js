@@ -239,7 +239,6 @@ const changePassword = async (req, res) => {
   if (NewPassword==OldPassword) {
     return res.status(400).json({success: false, error: `Old password and new password can not be same`});
   }
-
   try {
     await client.connect();
     const database = client.db(dbName);
@@ -269,22 +268,6 @@ const changePassword = async (req, res) => {
     const token = jwt.sign(data, jwtSecretKey);
     res.header('auth-token', token);
 
-    // Checking middleware
-    // function auth(req, res, next) {
-    //   const token = req.headers['auth-token'];
-    //   if (!token) {
-    //     return res.status(401).send('Access Denied!');
-    //   } else {
-    //     try {
-    //       const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    //       req.user = verified;
-    //        next();
-    //     } catch (err) {
-    //       res.status(400).send('Invalid token!');
-    //     }
-    //   }
-    // }
-
     // 1. HOW TO PASS IN THE DATABASE NAME AND COLLECTION NAME IN THE REST API FUNCTIONS ITSELF
     // --------------
 
@@ -297,5 +280,23 @@ const changePassword = async (req, res) => {
   }
 };
 
+const getUserData = async (req, res)=>{
+  try {
+    const Username = req.params.id;
+    const userID = req.user.userID;
+    console.log(req.user.userID);
 
-export {createUser, logIn, updateUser, deleteUser, changePassword};
+    const client = new MongoClient(url);
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const userData = await collection.findOne({Username: Username});
+
+    res.json({success: true, data: userData});
+  } catch (error) {
+    res.status(400).json({success: false, err: error});
+  }
+};
+
+export {createUser, logIn, updateUser, deleteUser, changePassword, getUserData};
