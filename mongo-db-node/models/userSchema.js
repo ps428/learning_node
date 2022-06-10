@@ -28,6 +28,13 @@ const users = new Schema({
     type: String,
     required: [true, 'Picture is required'],
   },
+  Username: {
+    type: String,
+    required: [true, 'Username is mandatory'],
+    unique: true,
+
+  },
+
   UserType: {
     type: String,
     default: 'CS',

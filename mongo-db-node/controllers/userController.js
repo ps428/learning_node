@@ -50,11 +50,20 @@ const checkDuplicateUsername = async (Username) => {
   return duplicate;
 };
 
+const createPassword = async ()=>{
+  const length = 8;
+  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let retVal = '';
+  for (let i = 0, n = charset.length; i < length; ++i) {
+    retVal += charset.charAt(Math.floor(Math.random() * n));
+  }
+  return retVal;
+};
+
 const createUser = async (req, res) => {
   const client = new MongoClient(url);
 
   const Username = req.body.Username;
-
 
   if (await checkDuplicateUsername(Username) == 1) {
     return res.status(409).json({success: false, error: `Error! duplicate username: ${Username}`});
@@ -63,6 +72,11 @@ const createUser = async (req, res) => {
   // tokenize the password with bcrypt or JWT something, TODO
   // now we set user password to hashed password
   const salt = await bcrypt.genSalt(Number(saltValue));
+
+  // Auto generation of passsword
+  if (req.body.Password=null) {
+    req.body.Password = await createPassword();
+  };
 
   req.body.Password = await bcrypt.hash(req.body.Password, salt);
 
@@ -84,7 +98,6 @@ const createUser = async (req, res) => {
     await client.close();
   }
 };
-
 
 // ---------GET PROFILE: DONE: Basic Login work ///THIS IS ALSO USED FOR CHANGE PASSWORD FUNCTIONALITY
 // DON'T REMOVE FETCH PROFILES FUNCTION
@@ -206,6 +219,9 @@ const changePassword = async (req, res) => {
   const Username = req.body.Username;
   const OldPassword = req.body.OldPassword;
   const NewPassword = req.body.NewPassword;
+
+//   let jwtSecretKey = process.env.JWT_SECRET_KEY;
+//   const token = jwt.sign(req.body, jwtSecretKey);
 
   // Check if user exists or not before updation
   if (! await checkDuplicateUsername(Username)) {
