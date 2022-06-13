@@ -41,8 +41,8 @@ const createPassword = async () => {
 const createUser = async (req, res) => {
   const userid = req.body.userid;
 
-  const duplicateCheck = await userDBFunctions.checkAvailableUserid(userid);
-  if (duplicateCheck['success'] == false) {
+  const duplicateCheck = await userDBFunctions.getUserDataByParameter(`userid="${userid}" OR mobile="${mobile}" OR email="${email}"`);
+  if (duplicateCheck['success'] == true) {
     return res.status(409).json({ success: false, error: 'User already exists with these details: userid, mobile and email must be unique' });
   }
 
@@ -129,13 +129,13 @@ const logIn = async (req, res) => {
 const updateUser = async (req, res) => {
   const userid = req.params.id;
 
-  const duplicateCheck = await userDBFunctions.checkAvailableUserid(userid);
-  if (duplicateCheck['success'] == true) {
+  const duplicateCheck = await userDBFunctions.getUserDataByParameter(`userid="${userid}"`);
+  if (duplicateCheck['success'] == false) {
     return res.status(409).json({ success: false, error: 'User does not exists' });
   }
 
   try {
-    const user = await userDBFunctions.getUserDataByParameter('userid', req.body.userid)
+    const user = await userDBFunctions.getUserDataByParameter(`userid="${req.body.userid}"`)
     const oldValues = user.values[0];
     // console.log(oldValues);
 
@@ -143,18 +143,16 @@ const updateUser = async (req, res) => {
       oldValues.name = req.body.name;
 
     if (req.body.mobile) {
-      const mobileCheck = await userDBFunctions.getUserDataByParameter('mobile', req.body.mobile)
+      const mobileCheck = await userDBFunctions.getUserDataByParameter(`mobile="${req.body.mobile}" AND userid!=${userid}`)
       if (mobileCheck['success'] == true)
-        if(mobileCheck.values[0].userid!=req.params.id)
           return res.status(409).json({ success: false, error: 'Mobile number is already taken' });
 
       oldValues.mobile = req.body.mobile
     }
 
     if (req.body.email) {
-      const emailCheck = await userDBFunctions.getUserDataByParameter('email', req.body.email)
+      const emailCheck = await userDBFunctions.getUserDataByParameter(`email="${req.body.email}" AND userid!=${userid}`)
       if (emailCheck['success'] == true)
-        if(emailCheck.values[0].userid!=req.params.id)
          return res.status(409).json({ success: false, error: 'Email is already taken' });
 
       oldValues.email = req.body.email

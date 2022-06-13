@@ -3,43 +3,43 @@ import { connection } from '../dbConfig.js';
 const userTable = process.env.USER_TABLE;
 
 
-const checkAvailableUserid = async (userid) => {
+// const checkAvailableUserid = async (userid) => {
 
-  const query = `SELECT * FROM ${userTable} WHERE LOWER(userid) = LOWER('${userid}');`
+//   const query = `SELECT * FROM ${userTable} WHERE LOWER(userid) = LOWER('${userid}');`
 
-  let result = 0;
-  try {
-    const response = await new Promise((resolve, reject) => {
-      connection.query(query, (error, res) => {
-        if (res) {
-          // console.log(ress.length>0)
-          // console.log(res)
-          resolve(res)
-          if (res.length > 0)
-            result = { success: false, data: 'User exists' }
-          else
-            result = { success: true, data: 'Registration in progress... Adding user to the database' }
+//   let result = 0;
+//   try {
+//     const response = await new Promise((resolve, reject) => {
+//       connection.query(query, (error, res) => {
+//         if (res) {
+//           // console.log(ress.length>0)
+//           // console.log(res)
+//           resolve(res)
+//           if (res.length > 0)
+//             result = { success: false, data: 'User exists' }
+//           else
+//             result = { success: true, data: 'User does not exist' }
 
-        }
-        else if (error) {
-          resolve(error)
-          result = { success: false, data: error }
-        }
-        else {
-          result = { success: true, data: 'Registration in progress... Adding user to the database' }
-        }
-      })
-    }
-    )
-  }
-  catch (e) {
+//         }
+//         else if (error) {
+//           resolve(error)
+//           result = { success: false, data: error }
+//         }
+//         else {
+//           result = { success: true, data: 'User does not exist: Something is wrong' }
+//         }
+//       })
+//     }
+//     )
+//   }
+//   catch (e) {
 
-    result = { success: false, error: e }
-  }
+//     result = { success: false, error: e }
+//   }
 
   // console.log(result)
-  return result
-}
+//   return result
+// }
 
 
 async function addNewUser(userData) {
@@ -80,9 +80,9 @@ async function addNewUser(userData) {
 // parameterType as in userid and paramaterName as in pranavs, there can be other combinations as well
 // made a function to deal with userid, mobile and email, as all these are unique in the base scenario
 // it can now be extended to any column of the db
-async function getUserDataByParameter(parameterType, parameterName) {
+async function getUserDataByParameter(criteria) {
 
-  const query = `SELECT * FROM ${userTable} WHERE ${parameterType} = "${parameterName}"`;
+  const query = `SELECT * FROM ${userTable} WHERE ${criteria}`;
   var result;
   try {
     const response = await new Promise((resolve, reject) => {
@@ -137,4 +137,4 @@ async function updateData(userData) {
 
 }
 
-export { addNewUser, checkAvailableUserid, getUserDataByParameter, updateData}
+export { addNewUser, getUserDataByParameter, updateData}
