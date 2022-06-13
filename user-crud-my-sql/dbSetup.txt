@@ -1,0 +1,28 @@
+Create Table users(
+  id int AUTO_INCREMENT,
+  name varchar (150),
+  mobile varchar (15),
+  email varchar (100),
+  picture varchar (50),
+  user_type_id tinyint,
+  userid varchar (100),
+  password varchar (100),
+  created_at timestamp,
+  updated_at timestamp,
+  PRIMARY KEY (id),
+  UNIQUE (userid),
+  UNIQUE(email),
+  UNIQUE(mobile)
+)
+
+INSERT INTO users (name, mobile, email, picture, user_type_id, userid, password, created_at) VALUES (
+  'Pranav',
+  '8987654335',
+  'email@test.com',
+  'image.jpg',
+  '1',
+  'pranavs',
+  'password',
+  TIMESTAMP("2022-05-23")
+)
+
