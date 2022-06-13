@@ -18,8 +18,8 @@ import {auth} from '../middlewares/auth.js';
 // Setting the requests
 userRouter.post('/', validator.createUserValidation, validatorAction, user.createUser);
 userRouter.put('/:id', validator.updateUserValidation, validatorAction, user.updateUser);
-// userRouter.post('/changepassword', validator.changePasswordValidation, validatorAction, user.changePassword);
-// userRouter.delete('/:id', validator.deleteValidation, validatorAction, user.deleteUser);
+userRouter.post('/changepassword', validator.changePasswordValidation, validatorAction, user.changePassword);
+userRouter.delete('/:id', validator.deleteValidation, validatorAction, user.deleteUser);
 
 // // for testing
 // userRouter.post('/login', validator.logInValidation, validatorAction, user.logIn);

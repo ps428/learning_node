@@ -37,8 +37,8 @@ const logInValidation = [
 
 const changePasswordValidation = [
   check('userid', 'Please enter a unique user id').not().isEmpty(),
-  check('oldPassword', 'Enter password of atleast 6 characters').isLength({min: 6}),
-  check('newPassword', 'Enter password of atleast 6 characters').isLength({min: 6}),
+  // check('oldPassword', 'Enter password of atleast 6 characters').isLength({min: 6}),
+  // check('newPassword', 'Enter password of atleast 6 characters').isLength({min: 6}),
 ];
 
 const deleteValidation = [
