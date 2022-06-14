@@ -42,7 +42,7 @@ const changePasswordValidation = [
 ];
 
 const deleteValidation = [
-  check('userid', 'Please enter a unique user id').not().isEmpty(),
+  // check('userid', 'Please enter a unique user id').not().isEmpty(),
 ];
 
 export {createUserValidation, updateUserValidation, logInValidation, deleteValidation, changePasswordValidation};

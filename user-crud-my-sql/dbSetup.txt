@@ -26,3 +26,12 @@ INSERT INTO users (name, mobile, email, picture, user_type_id, userid, password,
   TIMESTAMP("2022-05-23")
 )
 
+
+DATABASE=user_crud
+USERNAME=nodejs
+PASSWORD=mysql
+HOST=localhost
+USER_TABLE=users
+PORT=5000
+SALTVALUE=10
+JWT_SECRET_KEY=asddsadasdasdasfafwqdawdfafasd

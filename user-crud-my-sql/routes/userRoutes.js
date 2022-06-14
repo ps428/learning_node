@@ -22,7 +22,6 @@ userRouter.post('/changepassword', validator.changePasswordValidation, validator
 userRouter.delete('/:id', validator.deleteValidation, validatorAction, user.deleteUser);
 
 // // for testing
-// userRouter.post('/login', validator.logInValidation, validatorAction, user.logIn);
 // userRouter.get('/userData/:id', auth, user.getUserData);
 
 export {userRouter};

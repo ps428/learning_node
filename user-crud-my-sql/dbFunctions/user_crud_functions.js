@@ -6,45 +6,6 @@ const userTable = process.env.USER_TABLE;
 
 const saltValue = process.env.saltValue;
 
-// const checkAvailableUserid = async (userid) => {
-
-//   const query = `SELECT * FROM ${userTable} WHERE LOWER(userid) = LOWER('${userid}');`
-
-//   let result = 0;
-//   try {
-//     const response = await new Promise((resolve, reject) => {
-//       connection.query(query, (error, res) => {
-//         if (res) {
-//           // console.log(ress.length>0)
-//           // console.log(res)
-//           resolve(res)
-//           if (res.length > 0)
-//             result = { success: false, data: 'User exists' }
-//           else
-//             result = { success: true, data: 'User does not exist' }
-
-//         }
-//         else if (error) {
-//           resolve(error)
-//           result = { success: false, data: error }
-//         }
-//         else {
-//           result = { success: true, data: 'User does not exist: Something is wrong' }
-//         }
-//       })
-//     }
-//     )
-//   }
-//   catch (e) {
-
-//     result = { success: false, error: e }
-//   }
-
-  // console.log(result)
-//   return result
-// }
-
-
 async function addNewUserDB(userData) {
   const name = userData['name']
   const mobile = userData['mobile']
@@ -75,6 +36,7 @@ async function addNewUserDB(userData) {
       })
     })
   } catch (error) {
+    console.log("Error in addNewUserDB function: ",error)
     result = { success: false, msg: error }
   }
   return result
@@ -104,6 +66,7 @@ async function getUserDataByParameterDB(criteria) {
       })
     })
   } catch (error) {
+    console.log("Error in getUserDataByParameterDB function: ",error)
     result = { success: false, msg: error }
   }
   return result
@@ -134,6 +97,7 @@ async function updateDataDB(userData) {
       })
     })
   } catch (error) {
+    console.log("Error in updareDataDB function: ",error)
     result = { success: false, msg: error }
   }
   return result
@@ -159,6 +123,8 @@ async function deleteUserDB(userid, access=1){
         })
       })
     } catch (error) {
+    console.log("Error in deleteUserDB function: ",error)
+
       result = { success: false, msg: error }
     }
   }
@@ -203,7 +169,7 @@ async function passwordCheckDB(userid, password){
     });
     return result;
   } catch (e) {
-    console.log(`Error: ${e}`);
+    console.log("Error in passwordCheckDB function: ",error)
    let  result = { success: 0, data: e.message };
     return result;
   }
@@ -239,7 +205,7 @@ async function updatePasswordDB(userid, newPassword){
 
   }
   catch(e){
-    console.log("ERROR in updatePasswordDB: ",e)
+    console.log("ERROR in updatePasswordDB function: ",e)
     const result = {success:false, msg:e};
     return result
   }

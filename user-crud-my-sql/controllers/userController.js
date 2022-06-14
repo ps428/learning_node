@@ -3,6 +3,7 @@
 import express from 'express';
 // const express = require('express')
 const app = express();
+
 // to read json and access user's response's body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,8 +19,8 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 // const dotenv = require('dotenv');
 dotenv.config();
-const dbName = process.env.DBNAME;
 
+const dbName = process.env.DBNAME;
 const saltValue = process.env.saltValue;
 
 /// importing the db functions from dbFunctions directory
@@ -68,77 +69,26 @@ const createUser = async (req, res) => {
     // retreving the sent data back from DB
     const user = await userDBFunctions.getUserDataByParameterDB(`userid="${req.body.userid}"`)
 
-    res.json({ success: true, result: result, data: user });
+    res.json({ success: result.success&&user.success, result: result, data: user });
   } catch (e) {
     res.json({ success: false, error: e });
 
-    console.log(`Error: ${e}`);
+    console.log(`Error in createUser function: ${e}`);
   }
 };
 
-// ---------GET PROFILE: DONE: Basic Login work ///THIS IS ALSO USED FOR CHANGE PASSWORD FUNCTIONALITY
-// DON'T REMOVE FETCH PROFILES FUNCTION
-const fetchProfileData = async (Username, Password) => {
-  try {
-    const client = new MongoClient(url);
-    let profile = { success: 0, data: 'Wrong credentials' };
-    await client.connect();
-    const database = client.db(dbName);
-    const collection = database.collection(collectionName);
-    const userData = await collection.findOne({ Username: Username });
 
-    // if (!bcrypt.compareSync(Password, userData['Password'])) {
-    //   console.log('The Current Password is Wrong');
-    // } else {
-    //   console.log('Correct password');
-    // }
-    await bcrypt.compare(Password, userData['Password']).then((result) => {
-      if (!result) {
-        profile = { success: 0, data: 'Wrong credentials!!' };
-
-        console.log('Password doesn\'t match!');
-      } else {
-        profile = { success: 1, data: userData };
-        console.log('Password matches!');
-        // console.log(profile);
-        // return profile
-      }
-    });
-
-    console.log(profile);
-    return profile;
-  } catch (e) {
-    console.log(`Error: ${e}`);
-    profile = { success: 0, data: e.message };
-    return profile;
-  }
-};
-const logIn = async (req, res) => {
-  const Username = req.body.Username;
-  const Password = req.body.Password;
-
-  // console.log(`Getting profile of user: ${req.params.username}`);
-  const result = await fetchProfileData(Username, Password);
-  console.log(result);
-  if ((await result.success == 1)) {
-    res.json(result);
-  } else {
-    res.status(409).json(result);
-  }
-};
-
-// ---------UPDATE USER: TODO
+// ---------UPDATE USER: DONE
 const updateUser = async (req, res) => {
   const userid = req.params.id;
 
   const duplicateCheck = await userDBFunctions.getUserDataByParameterDB(`userid="${userid}"`);
   if (duplicateCheck['success'] == false) {
-    return res.status(409).json({ success: false, error: 'User does not exists' });
+    return res.status(404).json({ success: false, error: 'User does not exists' });
   }
 
   try {
-    const user = await userDBFunctions.getUserDataByParameterDB(`userid="${req.body.userid}"`)
-    const oldValues = user.values[0];
+    const oldValues = duplicateCheck.values[0];
     // console.log(oldValues);
 
     if (req.body.name)
@@ -175,7 +125,7 @@ const updateUser = async (req, res) => {
     console.log(result)
     return res.json({ success: result.success, msg: result.msg });
   } catch (error) {
-    console.warn('ERROR: ' + error);
+    console.warn('ERROR in updateUser function: ' + error);
   }
 };
 
@@ -188,18 +138,18 @@ const deleteUser = async (req, res) => {
   // Check if user exists or not before deletion
   const duplicateCheck = await userDBFunctions.getUserDataByParameterDB(`userid="${userid}"`);
   if (duplicateCheck['success'] == false) {
-    return res.status(409).json({ success: false, error: 'User does not exists' });
+    return res.status(404).json({ success: false, error: 'User does not exists' });
   }
   try {
     const result = await userDBFunctions.deleteUserDB(userid, 1);
     console.log(result)
     if (result.success == true) {
-      res.end(`Successfully deleted the user.`);
+      res.json({success: true, msg:`Successfully deleted the user.`});
     } else {
-      res.end('Unable to delete the user.');
+      res.json({success: true, msg:`Unable to delete the user.`});
     }
   } catch (error) {
-    console.log('ERROR: ' + error);
+    console.log('ERROR in deleteUser function: ' + error);
   }
 };
 
@@ -218,7 +168,7 @@ const changePassword = async (req, res) => {
 
     let result = await userDBFunctions.passwordCheckDB(userid, password);
     if (!result['success']) {
-      return res.status(404).json({ success: false, error: `Error! Wrong credentials` });
+      return res.status(401).json({ success: false, error: `Error! Wrong credentials` });
     }
 
     // Check if new password is same as old password
@@ -244,10 +194,10 @@ const changePassword = async (req, res) => {
     return res.json({ success: result.success, msg: `Changed password succesfully` });
   } catch (error) {
     console.log('ERROR in changePassword function: ' + error);
-    return res.status(400).json({ success: false, error: 'ERROR!' });
+    return res.status(500).json({ success: false, error: 'ERROR!' });
   }//   await client.close();
   // }
 };
 
 
-export { createUser, logIn, updateUser, deleteUser, changePassword };
+export { createUser, updateUser, deleteUser, changePassword };
