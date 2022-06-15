@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import { connection } from '../dbConfig.js';
 import bcrypt from 'bcryptjs';
 
@@ -15,11 +17,11 @@ async function addNewUserDB(userData) {
   const userid = userData['userid']
   const password = userData['password']
   const js_time = new Date();
-  const created_at = js_time.toISOString().split('T')[0] + ' ' + js_time.toTimeString().split(' ')[0];;
+  const created_at = js_time.toISOString().split('T')[0] + ' ' + js_time.toTimeString().split(' ')[0];
 
   const user_type_id = userData['user_type_id']
 
-  const query = `INSERT INTO ${userTable} (name, mobile, email, picture, user_type_id, userid, password, created_at) VALUES (?,?,?,?,?,?,?,?);`
+  const query = `INSERT INTO ${userTable} (name, mobile, email, picture, user_type_id, userid, password, created_at, is_deleted) VALUES (?,?,?,?,?,?,?,?,0);`
 
   var result;
   try {
@@ -47,7 +49,7 @@ async function addNewUserDB(userData) {
 // it can now be extended to any column of the db
 async function getUserDataByParameterDB(criteria) {
 
-  const query = `SELECT * FROM ${userTable} WHERE ${criteria}`;
+  const query = `SELECT * FROM ${userTable} WHERE (${criteria}) AND is_deleted=0`;
   var result;
   try {
     const response = await new Promise((resolve, reject) => {
@@ -81,7 +83,6 @@ async function updateDataDB(userData) {
   const user_type_id = userData['user_type_id']
   const updated_at = userData['updated_at']
 
-  const query = `UPDATE ${userTable} SET name = ?, mobile = ?, email = ?, picture = ?, user_type_id = ?, updated_at = ? WHERE userid='${userData['userid']}';`
   var result;
   try {
     const response = await new Promise((resolve, reject) => {
@@ -108,7 +109,7 @@ async function updateDataDB(userData) {
 async function deleteUserDB(userid, access=1){
   var result;
   if(access==1){
-    const query = `DELETE FROM ${userTable} WHERE userid='${userid}';`
+    const query = `UPDATE ${userTable} SET is_deleted=1 WHERE userid='${userid}';`
     try {
       const response = await new Promise((resolve, reject) => {
         connection.query(query, (err, results) => {
@@ -129,6 +130,7 @@ async function deleteUserDB(userid, access=1){
     }
   }
   else{
+    // todo post user type definition
   }
   return result
 }

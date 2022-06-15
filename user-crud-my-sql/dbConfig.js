@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
 
@@ -23,6 +24,5 @@ connection.connect((err)=>{
     else
     console.log(`Database Connected Successfully`)
 })
-
 
 export {connection}

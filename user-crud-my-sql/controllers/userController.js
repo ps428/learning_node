@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 import express from 'express';
@@ -45,6 +46,7 @@ const createUser = async (req, res) => {
   const email = req.body.email;
 
   const duplicateCheck = await userDBFunctions.getUserDataByParameterDB(`userid="${userid}" OR mobile="${mobile}" OR email="${email}"`);
+  console.log(duplicateCheck)
   if (duplicateCheck['success'] == true) {
     return res.status(409).json({ success: false, error: 'User already exists with these details: userid, mobile and email must be unique' });
   }
@@ -57,7 +59,7 @@ const createUser = async (req, res) => {
   // eslint-disable-next-line quotes
   if (req.body.password == "") {
     req.body.password = await createPassword();
-  };
+  }
 
   req.body.password = bcrypt.hashSync(req.body.password, salt);
 
@@ -68,7 +70,7 @@ const createUser = async (req, res) => {
 
     // retreving the sent data back from DB
     const user = await userDBFunctions.getUserDataByParameterDB(`userid="${req.body.userid}"`)
-
+    
     res.json({ success: result.success&&user.success, result: result, data: user });
   } catch (e) {
     res.json({ success: false, error: e });
@@ -103,7 +105,7 @@ const updateUser = async (req, res) => {
     }
 
     if (req.body.email) {
-      const emailCheck = await userDBFunctions.getUserDataByParameterDB(`email="${req.body.email}" AND userid!=${userid}`)
+      const emailCheck = await userDBFunctions.getUserDataByParameterDB(`email="${req.body.email}" AND userid!=${userid}`);
       if (emailCheck['success'] == true)
         return res.status(409).json({ success: false, error: 'Email is already taken' });
 
@@ -117,9 +119,9 @@ const updateUser = async (req, res) => {
     if (req.body.user_type_id) {
       oldValues.user_type_id = req.body.user_type_id
     }
-
     const js_time = new Date();
-    oldValues.updated_at = js_time.toISOString().split('T')[0] + ' ' + js_time.toTimeString().split(' ')[0];;
+
+    oldValues.updated_at =  js_time.toISOString().split('T')[0] + ' ' + js_time.toTimeString().split(' ')[0];
 
     const result = await userDBFunctions.updateDataDB(oldValues);
     console.log(result)
@@ -162,6 +164,7 @@ const changePassword = async (req, res) => {
   try {
     // Check if user exists or not before updation
     const duplicateCheck = await userDBFunctions.getUserDataByParameterDB(`userid="${userid}"`);
+    console.log(duplicateCheck)
     if (duplicateCheck['success'] == false) {
       return res.status(409).json({ success: false, error: 'User does not exists' });
     }
@@ -188,10 +191,12 @@ const changePassword = async (req, res) => {
     const token = jwt.sign(data, jwtSecretKey);
     res.header('auth-token', token);
 
-    // 1. HOW TO PASS IN THE DATABASE NAME AND COLLECTION NAME IN THE REST API FUNCTIONS ITSELF
-    // --------------
+    
+    if(res.succcess)
+      return res.json({ success: result.success, msg: `Changed password succesfully` });
+    else
+      return res.json({ success: result.success, msg: `Some error!` });
 
-    return res.json({ success: result.success, msg: `Changed password succesfully` });
   } catch (error) {
     console.log('ERROR in changePassword function: ' + error);
     return res.status(500).json({ success: false, error: 'ERROR!' });

@@ -15,6 +15,10 @@ Create Table users(
   UNIQUE(mobile)
 )
 
+ALTER TABLE users CHANGE created_at created_at TIMESTAMP
+ALTER TABLE users CHANGE updated_at updated_at TIMESTAMP
+ALTER TABLE users ADD is_deleted int;
+
 INSERT INTO users (name, mobile, email, picture, user_type_id, userid, password, created_at) VALUES (
   'Pranav',
   '8987654335',
