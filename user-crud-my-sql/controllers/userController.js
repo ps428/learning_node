@@ -116,12 +116,12 @@ const updateUser = async (req, res) => {
       oldValues.picture = req.body.picture
     }
 
-    if (req.body.user_type_id) {
-      oldValues.user_type_id = req.body.user_type_id
+    if (req.body.userTypeId) {
+      oldValues.userTypeId = req.body.userTypeId
     }
-    const js_time = new Date();
+    const jsTime = new Date();
 
-    oldValues.updated_at =  js_time.toISOString().split('T')[0] + ' ' + js_time.toTimeString().split(' ')[0];
+    oldValues.updatedAt =  jsTime.toISOString().split('T')[0] + ' ' + jsTime.toTimeString().split(' ')[0];
 
     const result = await userDBFunctions.updateDataDB(oldValues);
     console.log(result)

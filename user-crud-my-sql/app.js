@@ -10,7 +10,7 @@ dotenv.config();
 
 // setup db
 // eslint-disable-next-line no-unused-vars
-import {connection} from './dbConfig.js'
+// import {connection} from './dbConfig.js'
 
 // Importing user router to deal with users
 import {userRouter} from './routes/userRoutes.js';
@@ -25,6 +25,6 @@ app.get('/', (req,res)=>{
 });
 app.use('/api/users', userRouter);
 
-app.listen(process.env.port || 3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`Server listening on port ${process.env.port || 3000}...`);
 });

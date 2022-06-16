@@ -16,17 +16,17 @@ async function addNewUserDB(userData) {
 
   const userid = userData['userid']
   const password = userData['password']
-  const js_time = new Date();
-  const created_at = js_time.toISOString().split('T')[0] + ' ' + js_time.toTimeString().split(' ')[0];
+  const jsTime = new Date();
+  const createdAt = jsTime.toISOString().split('T')[0] + ' ' + jsTime.toTimeString().split(' ')[0];
 
-  const user_type_id = userData['user_type_id']
+  const userTypeId = userData['userTypeId']
 
   const query = `INSERT INTO ${userTable} (name, mobile, email, picture, user_type_id, userid, password, created_at, is_deleted) VALUES (?,?,?,?,?,?,?,?,0);`
 
-  var result;
+  let result;
   try {
     const response = await new Promise((resolve, reject) => {
-      connection.query(query, [name, mobile, email, picture, user_type_id, userid, password, created_at], (err, results) => {
+      connection.query(query, [name, mobile, email, picture, userTypeId, userid, password, createdAt], (err, results) => {
         if (err) {
           result = { success: false, msg: err }
           reject(err.message)
@@ -50,7 +50,7 @@ async function addNewUserDB(userData) {
 async function getUserDataByParameterDB(criteria) {
 
   const query = `SELECT * FROM ${userTable} WHERE (${criteria}) AND is_deleted=0`;
-  var result;
+  let result;
   try {
     const response = await new Promise((resolve, reject) => {
       connection.query(query, (err, results) => {
@@ -80,13 +80,16 @@ async function updateDataDB(userData) {
   const mobile = userData['mobile']
   const email = userData['email']
   const picture = userData['picture']
-  const user_type_id = userData['user_type_id']
-  const updated_at = userData['updated_at']
+  const userTypeId = userData['userTypeId']
+  const updatedAt = userData['updatedAt']
 
-  var result;
+
+  const query = `UPDATE ${userTable} SET name = ?, mobile = ?, email = ?, picture = ?, user_type_id = ?, updated_at = ? WHERE userid='${userData['userid']}';`
+
+  let result;
   try {
     const response = await new Promise((resolve, reject) => {
-      connection.query(query, [name, mobile, email, picture, user_type_id, updated_at], (err, results) => {
+      connection.query(query, [name, mobile, email, picture, userTypeId, updatedAt], (err, results) => {
         if (err) {
           result = { success: false, msg: err }
           reject(err.message)
@@ -107,7 +110,7 @@ async function updateDataDB(userData) {
 //acccess will be included once the user roles are defined.
 // by default access=1 meaning that the user is admin and has all the previleges
 async function deleteUserDB(userid, access=1){
-  var result;
+  let result;
   if(access==1){
     const query = `UPDATE ${userTable} SET is_deleted=1 WHERE userid='${userid}';`
     try {
