@@ -21,6 +21,7 @@ async function addNewUserDB(userData) {
 
   const userTypeId = userData['userTypeId']
 
+  console.log(userTypeId);
   const query = `INSERT INTO ${userTable} (name, mobile, email, picture, user_type_id, userid, password, created_at, is_deleted) VALUES (?,?,?,?,?,?,?,?,0);`
 
   let result;

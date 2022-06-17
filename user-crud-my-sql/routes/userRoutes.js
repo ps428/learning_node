@@ -9,9 +9,9 @@ import * as user from '../controllers/userController.js'
 // const user = require('../controllers/userController')
 
 // Importing validators
-import * as validator from '../validators/user_validation_schema.js';
+import * as validator from '../validators/userValidationSchema.js';
 // const validator = require('../validators/validation_schema')
-import {validatorAction} from '../validators/validation_action.js';
+import {validatorAction} from '../validators/validationAction.js';
 // import {auth} from '../middlewares/auth.js';
 // const validatorAction = require('../validators/validation_action')
 

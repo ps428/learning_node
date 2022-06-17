@@ -20,7 +20,7 @@ async function addUserMySQL(userData) {
     const password = userData['password']
     const userid = userData['userid']
     const email = userData['email']
-    const image_link = userData['image_link']
+    const image_link = userData['picture']
 
     var returnValue = 'failure';
 
@@ -30,7 +30,7 @@ async function addUserMySQL(userData) {
         var response = await new Promise((resolve, reject) => {
             connection.query(query, [name, password, userid, email, image_link], (err, results) => {
                 if (err){
-                    returnValue={success:false,data: err.message}
+                    returnValue={success:false,msg: err.message}
                     // console.log(err.message)
                     reject(err.message)
                 }
@@ -45,7 +45,7 @@ async function addUserMySQL(userData) {
         
     } catch (error) {
         console.log(error);
-        returnValue = {success:false, data:error.message}
+        returnValue = {success:false, msg:error.message}
     }
     return returnValue
 }

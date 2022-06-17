@@ -25,7 +25,7 @@ const dbName = process.env.DBNAME;
 const saltValue = process.env.saltValue;
 
 /// importing the db functions from dbFunctions directory
-import * as userDBFunctions from '../dbFunctions/user_crud_functions.js'
+import * as userDBFunctions from '../dbFunctions/userCrudFunctions.js'
 
 
 // ---------CREATE USER: DONE

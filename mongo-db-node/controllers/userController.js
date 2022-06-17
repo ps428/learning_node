@@ -44,6 +44,7 @@ const checkDuplicateUsername = async (Username) => {
     if (user.Username == Username) {
       duplicate = 1;
     };
+    console.log('checked');
   } catch (e) {
     if (e != 'TypeError: Cannot read properties of null (reading \'Username\')') {
       console.log(`Error: ${e}`);
@@ -115,11 +116,11 @@ const fetchProfileData = async (Username, Password) => {
     const collection = database.collection(collectionName);
     const userData = await collection.findOne({Username: Username});
 
-    if (!bcrypt.compareSync(Password, userData['Password'])) {
-      console.log('The Current Password is Wrong');
-    } else {
-      console.log('Correct password');
-    }
+    // if (!bcrypt.compareSync(Password, userData['Password'])) {
+    //   console.log('The Current Password is Wrong');
+    // } else {
+    //   console.log('Correct password');
+    // }
     await bcrypt.compare(Password, userData['Password']).then((result) => {
       if (!result) {
         profile = {success: 0, data: 'Wrong credentials!!'};
@@ -293,6 +294,7 @@ const getUserData = async (req, res)=>{
 
     const userData = await collection.findOne({Username: Username});
 
+    console.log(userData);
     res.json({success: true, data: userData});
   } catch (error) {
     res.status(400).json({success: false, err: error});
