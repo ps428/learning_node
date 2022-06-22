@@ -51,6 +51,7 @@ async function addNewUserDB(userData) {
 async function getUserDataByParameterDB(criteria) {
 
   const query = `SELECT * FROM ${userTable} WHERE (${criteria}) AND is_deleted=0`;
+  // console.log(query);
   let result;
   try {
     const response = await new Promise((resolve, reject) => {
