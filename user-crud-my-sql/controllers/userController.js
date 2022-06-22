@@ -97,7 +97,7 @@ const updateUser = async (req, res) => {
       oldValues.name = req.body.name;
 
     if (req.body.mobile) {
-      const mobileCheck = await userDBFunctions.getUserDataByParameterDB(`mobile="${req.body.mobile}" AND userid!=${userid}`)
+      const mobileCheck = await userDBFunctions.getUserDataByParameterDB(`mobile="${req.body.mobile}" AND userid!="${userid}"`)
       if (mobileCheck['success'] == true)
         return res.status(409).json({ success: false, error: 'Mobile number is already taken' });
 
@@ -105,7 +105,7 @@ const updateUser = async (req, res) => {
     }
 
     if (req.body.email) {
-      const emailCheck = await userDBFunctions.getUserDataByParameterDB(`email="${req.body.email}" AND userid!=${userid}`);
+      const emailCheck = await userDBFunctions.getUserDataByParameterDB(`email="${req.body.email}" AND userid!="${userid}"`);
       if (emailCheck['success'] == true)
         return res.status(409).json({ success: false, error: 'Email is already taken' });
 
@@ -192,10 +192,10 @@ const changePassword = async (req, res) => {
     res.header('auth-token', token);
 
     
-    if(res.succcess)
+    if(result.success)
       return res.json({ success: result.success, msg: `Changed password succesfully` });
     else
-      return res.json({ success: result.success, msg: `Some error!` });
+      return res.json({ success: result.success, msg: `Some error!`, data:result  });
 
   } catch (error) {
     console.log('ERROR in changePassword function: ' + error);

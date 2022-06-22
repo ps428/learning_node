@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import mysql from 'mysql2';
+import mysql from 'mysql';
 import dotenv from 'dotenv';
 
 //setup env
@@ -21,8 +21,19 @@ connection.connect((err)=>{
         console.log(err.message);
     }
     // console.log(connection)
-    else
-    console.log(`Database Connected Successfully`)
+    else{
+        console.log(`Database Connected Successfully`)
+    }
+    // console.log(connection)
+
+    
 })
+
+// console.log(connection)
+// connection.end()
+// console.log(connection)
+// console.log(connection.stream.connecting)
+
+// console.log(connection)
 
 export {connection}
