@@ -1,4 +1,4 @@
-import DbOperations from 'db_pkg'
+import DbOperations from 'db_pkg.mjs'
 let dbOps = new DbOperations();
 
 let query = "SELECT * FROM users LIMIT 2";
