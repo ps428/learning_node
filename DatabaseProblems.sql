@@ -880,4 +880,62 @@ WHERE
   
     
        
-  
+WITH cte AS (
+  SELECT
+    Name, 
+    Flag
+    WHERE Flag=0
+  UNION
+  SELECT 
+    a.Name, 
+)  
+
+SELECT TIME(Duration), LogInName, LogInTime, LogOutName, LogOutTime FROM(
+  SELECT
+   SUM(TIMEDIFF(if(b.Time IS NULL, NOW(), b.Time), a.Time)) OVER(PARTITION BY a.Name) as Duration,
+    b.Name as LogInName,
+    b.Time as LogInTime,
+    a.Name LogOutName,
+    a.Time as LogOutTime
+  from
+    Session a,
+    Session b
+  WHERE
+    a.Name = b.Name
+    AND a.FLAG = 1
+    AND b.Flag = 0
+    AND a.Time < if(b.Time IS NULL, NOW(), b.Time))c;
+
+  -- recursive queries
+  -- write a query to get 3^x 
+  WITH RECURSIVE x2 (result) AS (
+    SELECT 1
+    UNION ALL
+    SELECT result+2 FROM x2 WHERE result <10)
+SELECT * FROM x2;
+
+-- use parittion to add the of durations of differnt users
+
+  WITH RECURSIVE rec(Duration, OldTime, OldFlag, NewTime, NewFlag, Name) AS (
+    SELECT 0, Time, -1, Time, Flag, Name FROM Session WHERE Name='X' AND Time = '2022-03-06 09:30:00' 
+    UNION ALL
+    SELECT Duration + if(Flag=1, TIMEDIFF(NewTime,OldTime),0), NewTime, NewFlag, Session.Time, Session.Flag, rec.Name FROM rec, Session
+  )
+  SELECT * from rec;
+
+--able to get duration values
+SELECT TIME(Duration), LogInName, LogInTime, LogOutName, LogOutTime FROM(
+  SELECT
+   SUM(TIMEDIFF(if(b.Time IS NULL, NOW(), b.Time), a.Time)) OVER(PARTITION BY a.Name) as Duration,
+    b.Name as LogInName,
+    b.Time as LogInTime,
+    a.Name LogOutName,
+    a.Time as LogOutTime
+  from
+    Session a,
+    Session b
+  WHERE
+    a.Name = b.Name
+    AND a.FLAG = 1
+    AND b.Flag = 0
+    AND a.Time < if(b.Time IS NULL, NOW(), b.Time))c;
