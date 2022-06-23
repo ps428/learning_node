@@ -590,10 +590,352 @@ FROM
 SELECT DISTINCT
   Categories.Name
 FROM
-Customers
-INNER JOIN City ON Customers.CityID = City.CityID
-INNER JOIN State ON City.StateID = State.StateID AND State.StateName = 'Rajasthan'
-INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID
-INNER JOIN OrderProductList ON Orders.OrderID = OrderProductList.OrderID
-INNER JOIN Products ON OrderProductList.ProductID = Products.ProductID
-INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID;
+  Customers
+  INNER JOIN City ON Customers.CityID = City.CityID
+  INNER JOIN State ON City.StateID = State.StateID
+  AND State.StateName = 'Rajasthan'
+  INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+  INNER JOIN OrderProductList ON Orders.OrderID = OrderProductList.OrderID
+  INNER JOIN Products ON OrderProductList.ProductID = Products.ProductID
+  INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID;
+
+-----------------------------------
+--PROBLEM 2
+-- Flag = 1 => Log in
+-- Flag = 0 => Log out
+CREATE TABLE Session(
+  Name VARCHAR(60),
+  PCName VARCHAR(30),
+  Time TIMESTAMP,
+  Flag INT
+);
+
+INSERT INTO
+  Session
+VALUES
+  ('X', 'PC1', '2022-03-06 09:30:00', 1);
+
+INSERT INTO
+  Session
+VALUES
+  ('Y', 'PC2', '2022-03-06 09:45:00', 1);
+
+INSERT INTO
+  Session
+VALUES
+  ('X', 'PC1', '2022-03-06 10:30:00', 0);
+
+INSERT INTO
+  Session
+VALUES
+  ('X', 'PC1', '2022-03-06 11:10:00', 1);
+
+INSERT INTO
+  Session
+VALUES
+  ('Y', 'PC2', '2022-03-06 13:30:00', 0);
+
+INSERT INTO
+  Session
+VALUES
+  ('Y', 'PC2', '2022-03-06 14:30:00', 1);
+
+INSERT INTO
+  Session
+VALUES
+  ('X', 'PC1', '2022-03-06 15:10:00', 0);
+
+SELECT
+  sum(a.TimeD),
+  Name
+FROM
+  (
+    SELECT
+      if(a.Flag = 0, -1, 1) * a.Time as TimeD,
+      a.Name
+    FROM
+      Session a
+  ) b
+WHERE
+  a.name = 'X';
+
+SELECT
+  DATEADD(
+    ms,
+    SUM(DATEDIFF(ms, '00:00:00.000', Time)),
+    '00:00:00.000'
+  ) as time
+FROM
+  Session;
+
+SELECT
+  DATEADD(
+    ms,
+    SUM(
+      DATEDIFF(ms, '00:00:00.000', convert(datetime, Time))
+    ),
+    '00:00:00.000'
+  ) as time
+FROM
+  Session;
+
+SELECT
+  TIMEDIFF(b.Time, a.Time),
+  b.Name,
+  b.Time as LogInTime,
+  a.Name,
+  a.Time as LogOutTime
+from
+  Session a,
+  Session b,
+  Session c
+WHERE
+  a.Name = b.Name
+  AND a.Name = c.Name
+  AND a.FLAG = 1
+  AND b.Flag = 0
+  AND c.Flag = 1
+  AND a.Time < b.Time
+  AND c.Time > b.Time;
+
+SELECT
+  TIMEDIFF(b.Time, a.Time),
+  b.Name,
+  b.Time as LogInTime,
+  a.Name,
+  a.Time as LogOutTime
+from
+  Session a,
+  Session b
+WHERE
+  a.Name = b.Name
+  AND a.FLAG = 1
+  AND b.Flag = 0
+  AND a.Time < b.Time;
+
+CREATE TABLE Session2(
+  Name VARCHAR(60),
+  PCName VARCHAR(30),
+  LogInTime TIMESTAMP,
+  LogOutTime TIMESTAMP
+);
+
+INSERT INTO
+  Session2
+VALUES
+  (
+    'X',
+    'PC1',
+    '2022-03-06 09:30:00',
+    '2022-03-06 10:30:00'
+  );
+
+INSERT INTO
+  Session2
+VALUES
+  (
+    'Y',
+    'PC2',
+    '2022-03-06 09:45:00',
+    '2022-03-06 13:30:00'
+  );
+
+INSERT INTO
+  Session2
+VALUES
+  (
+    'X',
+    'PC1',
+    '2022-03-06 11:10:00',
+    '2022-03-06 15:10:00'
+  );
+
+INSERT INTO
+  Session2 (Name, PCName, LogInTime)
+VALUES
+  ('Y', 'PC2', '2022-03-06 14:30:00');
+
+SELECT
+FROM
+  (
+    SELECT
+      TIMEDIFF(
+        if(a.LogOutTime IS NULL, NOW(), a.LogOutTime),
+        a.LogInTime
+      ) as SessionTime,
+      Name,
+      NOW() as CurremtTime
+    FROM
+      Session2 a
+  ) b
+WHERE
+  Name = 'X';
+
+SELECT
+  b.Name,
+  a.Name
+from
+  Session2 a,
+  Session2 b
+WHERE
+  a.Name = b.Name;
+
+CREATE TABLE Fried (
+  id INT,
+  content varchar(300),
+  previous_id INT,
+  next_id INT
+);
+
+INSERT INTO
+  Fried
+VALUES
+  (1, "Preheat an oven to 220 degrees C.", NULL, 2);
+
+INSERT INTO
+  Fried
+VALUES
+  (2, "Peel four potatoes.", 1, 4);
+
+INSERT INTO
+  Fried
+VALUES
+  (3, "Toss sliced potatoes with oil.	", 4, 6);
+
+INSERT INTO
+  Fried
+VALUES
+  (4, "Cut potatoes into slices.	", 2, 3);
+
+INSERT INTO
+  Fried
+VALUES
+  (
+    5,
+    "Season the hot slices with salt and pepper.	",
+    6,
+    NULL
+  );
+
+INSERT INTO
+  Fried
+VALUES
+  (
+    6,
+    "Bake in the preheated oven for 20 minutes.	",
+    3,
+    5
+  );
+
+SELECT
+  a.id,
+  a.content,
+  "=>",
+  b.id,
+  b.content
+FROM
+  Fried a,
+  Fried b
+WHERE
+  a.next_id = b.id;
+
+
+SELECT
+  TIMEDIFF(if(b.Time IS NULL, NOW(), b.Time), a.Time) as Duration,
+  b.Name as LogInName,
+  b.Time as LogInTime,
+  a.Name LogOutName,
+  a.Time as LogOutTime
+from
+  Session a,
+  Session b
+WHERE
+  a.Name = b.Name
+  AND a.FLAG = 1
+  AND b.Flag = 0
+  AND a.Time < if(b.Time IS NULL, NOW(), b.Time);
+
+SELECT
+  TIMEDIFF(if(b.Time IS NULL, NOW(), b.Time), a.Time),
+  b.Name,
+  b.Time as LogInTime,
+  a.Name,
+  a.Time as LogOutTime
+from
+  Session a,
+  Session b,
+  Session c
+WHERE
+  a.Name = b.Name
+  AND a.Name = c.Name
+  AND a.FLAG = 1
+  AND b.Flag = 0
+  AND c.Flag = 1
+  AND a.Time < b.Time
+  AND a.Time > c.Time;
+
+  select c.*,"=>",NextRow.* from  Fried  as c
+     left join Fried NextRow on  c.next_id = NextRow.id
+    order by if(isnull(c.previous_id),0,c.previous_id);
+  
+    
+       
+WITH cte AS (
+  SELECT
+    Name, 
+    Flag
+    WHERE Flag=0
+  UNION
+  SELECT 
+    a.Name, 
+)  
+
+SELECT TIME(Duration), LogInName, LogInTime, LogOutName, LogOutTime FROM(
+  SELECT
+   SUM(TIMEDIFF(if(b.Time IS NULL, NOW(), b.Time), a.Time)) OVER(PARTITION BY a.Name) as Duration,
+    b.Name as LogInName,
+    b.Time as LogInTime,
+    a.Name LogOutName,
+    a.Time as LogOutTime
+  from
+    Session a,
+    Session b
+  WHERE
+    a.Name = b.Name
+    AND a.FLAG = 1
+    AND b.Flag = 0
+    AND a.Time < if(b.Time IS NULL, NOW(), b.Time))c;
+
+  -- recursive queries
+  -- write a query to get 3^x 
+  WITH RECURSIVE x2 (result) AS (
+    SELECT 1
+    UNION ALL
+    SELECT result+2 FROM x2 WHERE result <10)
+SELECT * FROM x2;
+
+-- use parittion to add the of durations of differnt users
+
+  WITH RECURSIVE rec(Duration, OldTime, OldFlag, NewTime, NewFlag, Name) AS (
+    SELECT 0, Time, -1, Time, Flag, Name FROM Session WHERE Name='X' AND Time = '2022-03-06 09:30:00' 
+    UNION ALL
+    SELECT Duration + if(Flag=1, TIMEDIFF(NewTime,OldTime),0), NewTime, NewFlag, Session.Time, Session.Flag, rec.Name FROM rec, Session
+  )
+  SELECT * from rec;
+
+--able to get duration values
+SELECT TIME(Duration), LogInName, LogInTime, LogOutName, LogOutTime FROM(
+  SELECT
+   SUM(TIMEDIFF(if(b.Time IS NULL, NOW(), b.Time), a.Time)) OVER(PARTITION BY a.Name) as Duration,
+    b.Name as LogInName,
+    b.Time as LogInTime,
+    a.Name LogOutName,
+    a.Time as LogOutTime
+  from
+    Session a,
+    Session b
+  WHERE
+    a.Name = b.Name
+    AND a.FLAG = 1
+    AND b.Flag = 0
+    AND a.Time < if(b.Time IS NULL, NOW(), b.Time))c;
