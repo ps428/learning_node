@@ -1,13 +1,13 @@
 /* eslint-disable no-undef */
 import express from 'express';
 // Importing user router to deal with users
-import {userRouter} from './routes/userRoutes.js';
-// env config
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
 // const dotenv = require('dotenv');
-dotenv.config();
-
+// dotenv.config();
+import {userRouter} from './routes/userRoutes.js';
+// env config
+// console.log(process.env)
 // const express = require('express')
 const app = express();
 
