@@ -49,8 +49,8 @@ export default class UserController {
     const mobile = req.body.mobile;
     const email = req.body.email;
 
-    const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`userid="${userid}" OR mobile="${mobile}" OR email="${email}"`);
-    console.log(duplicateCheck)
+    const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`(userid=? OR mobile=? OR email=?)`,[userid, mobile,email]);
+    // console.log(duplicateCheck)
     if (duplicateCheck['success'] == true) {
       return res.status(409).json({ success: false, error: 'User already exists with these details: userid, mobile and email must be unique' });
     }
@@ -66,18 +66,18 @@ export default class UserController {
     }
 
     req.body.password = bcrypt.hashSync(req.body.password, salt);
-
+    // console.log(req.body)
     // how to get username?
     // eslint-disable-next-line require-jsdoc
     try {
       const result = await this.userDBFunctions.addNewUserDB(req.body);
-
+      // console.log("--",result)
       // retreving the sent data back from DB
-      const user = await this.userDBFunctions.getUserDataByParameterDB(`userid="${req.body.userid}"`)
+      const user = await this.userDBFunctions.getUserDataByParameterDB(`(userid=?)`,[req.body.userid])
 
       res.json({ success: result.success && user.success, result: result, data: user });
     } catch (e) {
-      res.json({ success: false, error: e });
+      res.status(400).json({ success: false, error: e });
 
       console.log(`Error in createUser function: ${e}`);
     }
@@ -88,7 +88,8 @@ export default class UserController {
   async updateUser(req, res) {
     const userid = req.params.id;
 
-    const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`userid="${userid}"`);
+    const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`(userid=?)`,[userid]);
+    // console.log("--,",duplicateCheck)
     if (duplicateCheck['success'] == false) {
       return res.status(404).json({ success: false, error: 'User does not exists' });
     }
@@ -96,12 +97,12 @@ export default class UserController {
     try {
       const oldValues = duplicateCheck.values[0];
       // console.log(oldValues);
-
+      
       if (req.body.name)
         oldValues.name = req.body.name;
 
       if (req.body.mobile) {
-        const mobileCheck = await this.userDBFunctions.getUserDataByParameterDB(`mobile="${req.body.mobile}" AND userid!="${userid}"`)
+        const mobileCheck = await this.userDBFunctions.getUserDataByParameterDB(`(mobile=? AND userid!=?)`,[req.body.mobile, userid])
         if (mobileCheck['success'] == true)
           return res.status(409).json({ success: false, error: 'Mobile number is already taken' });
 
@@ -109,7 +110,7 @@ export default class UserController {
       }
 
       if (req.body.email) {
-        const emailCheck = await this.userDBFunctions.getUserDataByParameterDB(`email="${req.body.email}" AND userid!="${userid}"`);
+        const emailCheck = await this.userDBFunctions.getUserDataByParameterDB(`(email=? AND userid!=?)`,[req.body.email, userid]);
         if (emailCheck['success'] == true)
           return res.status(409).json({ success: false, error: 'Email is already taken' });
 
@@ -121,17 +122,17 @@ export default class UserController {
       }
 
       if (req.body.userTypeId) {
-        oldValues.userTypeId = req.body.userTypeId
+        oldValues.user_type_id = req.body.userTypeId
       }
       const jsTime = new Date();
+      oldValues.updated_at = jsTime.toISOString().split('T')[0] + ' ' + jsTime.toTimeString().split(' ')[0];
 
-      oldValues.updatedAt = jsTime.toISOString().split('T')[0] + ' ' + jsTime.toTimeString().split(' ')[0];
-
-      const result = await this.userDBFunctions.updateDataDB(oldValues);
-      console.log(result)
+      const result = await this.userDBFunctions.updateDataDB(oldValues,"users");
+      // console.log(result)
       return res.json({ success: result.success, msg: result.msg });
     } catch (error) {
       console.warn('ERROR in updateUser function: ' + error);
+      return res.status(400).json({success: false, msg:"FATAL ERROR! Contact Adminstrator"});
     }
   }
 
@@ -142,13 +143,13 @@ export default class UserController {
     // console.log(userid)
 
     // Check if user exists or not before deletion
-    const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`userid="${userid}"`);
+    const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`userid=?`,[userid]);
     if (duplicateCheck['success'] == false) {
       return res.status(404).json({ success: false, error: 'User does not exists' });
     }
     try {
       const result = await this.userDBFunctions.deleteUserDB(userid, 1);
-      console.log(result)
+      // console.log(result)
       if (result.success == true) {
         res.json({ success: true, msg: `Successfully deleted the user.` });
       } else {
@@ -156,6 +157,7 @@ export default class UserController {
       }
     } catch (error) {
       console.log('ERROR in deleteUser function: ' + error);
+      return res.status(400).json({success: false, msg:"FATAL ERROR! Contact Adminstrator"});
     }
   }
 
@@ -167,8 +169,8 @@ export default class UserController {
     const newPassword = req.body.newPassword;
     try {
       // Check if user exists or not before updation
-      const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`userid="${userid}"`);
-      console.log(duplicateCheck)
+      const duplicateCheck = await this.userDBFunctions.getUserDataByParameterDB(`userid=?`,[userid]);
+      // console.log(duplicateCheck)
       if (duplicateCheck['success'] == false) {
         return res.status(409).json({ success: false, error: 'User does not exists' });
       }
@@ -203,7 +205,7 @@ export default class UserController {
 
     } catch (error) {
       console.log('ERROR in changePassword function: ' + error);
-      return res.status(500).json({ success: false, error: 'ERROR!' });
+      return res.status(400).json({success: false, msg:"FATAL ERROR! Contact Adminstrator"});
     }//   await client.close();
     // }
   }
