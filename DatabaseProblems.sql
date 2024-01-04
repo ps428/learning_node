@@ -587,8 +587,8 @@ FROM
   INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID;
 
 --9 Get all the categories ordered by a customer from state Rajasthan
-SELECT DISTINCT
-  Categories.Name
+SELECT
+  DISTINCT Categories.Name
 FROM
   Customers
   INNER JOIN City ON Customers.CityID = City.CityID
