@@ -1,0 +1,227 @@
+commit 406dc2c12e2f3e54c5aba04d41c9fcb175ff8311
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Tue Jun 28 12:19:26 2022 +0530
+
+    Linked with db package succesfully
+
+commit 214d9b199a4811a0a3a122a5e7309fc8da612d4b
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 23 12:50:03 2022 +0530
+
+    changed functions to classes and methods
+
+commit 389abab5a2c4e6e23f3b6e03266c0fe6188b48e1
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 23 10:08:47 2022 +0530
+
+    Removed all node modules
+
+commit 23299aa53a2d0533147cf0909601180e95988947
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 23 10:06:05 2022 +0530
+
+    removed modules
+
+commit a30b764568cc8d87be8027c497cb0b10fdf04e5e
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 23 10:04:40 2022 +0530
+
+    Added gitignore
+
+commit fc1c971965e792b119aaf885fc9f37b0c62de8a1
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Wed Jun 22 10:25:27 2022 +0530
+
+    Rsolved error with change password, 'Wrong varaible provided, changed res to result'
+
+commit 03053685f4ce5136cf17757d2a99ddd1e470e4ed
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Sat Jun 18 14:00:00 2022 +0100
+
+    SQL Problems
+
+commit 66deceee80908e12d0ca9ef99f8a02a9f9009a4a
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 17 23:49:03 2022 +0530
+
+    Added sql problems
+
+commit d01557e7de95f41bfeaf4f25db0edc20f173b606
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 16 16:25:10 2022 +0530
+
+    Naming updated as per the coding standard
+
+commit 934f078e8b2b6104f9e7b4b1419ce5a58a56e083
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Wed Jun 15 15:54:25 2022 +0530
+
+    Delete user changes applied
+
+commit 8627cd1b0e242dbb308914d8affef283a492a65d
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Tue Jun 14 11:19:00 2022 +0530
+
+    Updated the error codes and responses. Working perfectly now with the remote DB
+
+commit 405bd6d38d260e5a1996cbcd8c545ddf82ce08ac
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Mon Jun 13 16:24:41 2022 +0530
+
+    Change password working perfectly
+
+commit 2c756857829545fe3fc086861b1666c2af78a9ae
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Mon Jun 13 15:29:45 2022 +0530
+
+    Update working perfectly now with more elegant query
+
+commit 9ac52f16ef7a4be385f802793267d833e94ddbb2
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Mon Jun 13 15:16:01 2022 +0530
+
+    Update query working perfectly
+
+commit 73a968f7a1d1d1ee9b98417af3f80c021a14b434
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Mon Jun 13 13:24:11 2022 +0530
+
+    Addaddition done successfully
+
+commit c4a932d9db26e2a285aafc29438012330b6f8550
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 10 15:46:47 2022 +0530
+
+    Added an auth middleware that will verify the user by their JWT
+
+commit d4587a35cc5dea1d3ce8a7e4623209c320a3feef
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 10 15:11:34 2022 +0530
+
+    Able to successfully send JWT to headers, verified with JWT debugger: Able to send the user id from db as a key there
+
+commit 4786ec7abc58969f29ed595f3d050b10942ed7b6
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 10 14:56:09 2022 +0530
+
+    Change passsword error resolved, = was used instead of == : Also able to send kind of a token on change password, JWT looking good, needs to be checked once
+
+commit 3f3c3e9e6f9f042e2c154591e3172bda6d1629d3
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 10 12:39:37 2022 +0530
+
+    Getting issue with check password (fetch profile) function
+
+commit 453538bbdd76cf2a36ba90dee11f5271443c61f9
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 10 11:08:33 2022 +0530
+
+    Schema done, push before dealing with jwt
+
+commit 4a939a81cb39b940e9ddb9f011c8ee7ce4c8144e
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 9 15:11:11 2022 +0530
+
+    Added and executed the schema successfully
+
+commit c39d5998d084f12514ea4394c152fda6fa395a8a
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 9 15:05:34 2022 +0530
+
+    SAdded ESLint and worked on MVC structuring, ES6 changes, REST API changes...will now work on schema for db
+
+commit c8e9643f1d3d7e63674ef864653dbf185e535fa9
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Wed Jun 8 16:07:16 2022 +0530
+
+    Validators middleware functioning perfectly now
+
+commit 4778d4208c4e1fa922c511bd02b073d2a3899227
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Wed Jun 8 11:58:53 2022 +0530
+
+    Change password success. Need to look at minute details now
+
+commit d398399ebf1672a802ab368ba686e380ece1c3e4
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Wed Jun 8 11:50:02 2022 +0530
+
+    Update user success. need to look at password change now
+
+commit 67a0e0f8d48ca49ea383c44dad04e3ea0b87e9c4
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Tue Jun 7 17:48:37 2022 +0530
+
+    For each and profile error resolved. NEVER CALL AWAIT FROM FOR EACH, USE TO ARRAY() INSTEAD OF THAT
+
+commit c0e143dcd86c5126d0057d26eb6691885bd343af
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Tue Jun 7 13:03:25 2022 +0530
+
+    Add user, duplicate check, get profile and fetch profile working properly
+
+commit d1129f6f38eebda7711bb8553f846692c3e461ee
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Tue Jun 7 11:22:00 2022 +0530
+
+    Started with mongo db, basic crud working, will go to user auth now
+
+commit 808b2b86bfd3c8a74e257d09ab30db22822deaeb
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Mon Jun 6 12:21:25 2022 +0530
+
+    Login and register user basic functionality working, will try to add hashing now
+
+commit 5b6a0dbe01e443d3a4ff95d9e52d126e4071fc81
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Sun Jun 5 10:08:08 2022 +0530
+
+    My sql push and get working with postman
+
+commit 372017c044e9c7eb1f77901209ed73ef2092d9cd
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Sun Jun 5 10:07:04 2022 +0530
+
+    My sql push and get working with postman
+
+commit 0a3c2d150f30a98a9e36ee109f3f51195e1c2d2d
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Sun Jun 5 14:00:00 2022 +0100
+
+    mysql connected with push and get working
+
+commit faeb13873977a1156f5802776ae738357958909e
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Sat Jun 4 20:00:00 2022 -0600
+
+    my sql node work push
+
+commit 3565241cfe81926e0a46e87b3fc4f1f2c33dcbbd
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 3 16:59:54 2022 +0530
+
+    Able to add new user, need to handle the errors of duplicate entry
+
+commit f32ae60c7d2e9f64f83a8600b9f053c486e42ffc
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 3 16:36:00 2022 +0530
+
+    AMStarted new my-sql-node project for user handling, MySQL Linked successfully with node, able to send data on postman
+
+commit 68b339282377d4bcc1f89984041f8562410c5481
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Fri Jun 3 12:25:16 2022 +0530
+
+    Node JS FCC tutorial done
+
+commit 8180f5961203951dfd69df826d7e954aec840a3a
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Thu Jun 2 16:54:21 2022 +0530
+
+    Query done, now going to middleware
+
+commit c2012776794b88585062e95e5b821225de29d07c
+Author: Pranav <pranav.bhawan@gmail.com>
+Date:   Wed Jun 1 14:15:08 2022 +0530
+
+    Node JS part done, going to Express JS now
